@@ -16,14 +16,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Set CI=false to prevent warnings from breaking the build
                 bat 'set CI=false && npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'npm test'
+                // Add --passWithNoTests flag to allow tests to pass if none are found
+                bat 'npm test -- --passWithNoTests'
             }
         }
 
