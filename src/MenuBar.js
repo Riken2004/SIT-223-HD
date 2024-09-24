@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import './index.css';
 
-const MenuBar = () => {
-  const [searchText, setSearchText] = useState('');
+function MenuBar() {
+  const [search, setSearch] = useState("");
 
   const handleSearchChange = (event) => {
-    setSearchText(event.target.value);
+    setSearch(event.target.value);
   };
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    console.log('Searching for:', searchText);
+    console.log("Search submitted:", search);
   };
 
   return (
-    <div className="main-bar">
-      <p>New Post</p>
+    <div>
+      <form onSubmit={handleSearchSubmit}>
+        <input
+          type="text"
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="Search..."
+        />
+        <button type="submit">Search</button>
+      </form>
     </div>
   );
-};
+}
 
 export default MenuBar;
