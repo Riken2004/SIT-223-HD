@@ -1,0 +1,17 @@
+.main-bar {
+    display: block;
+    width: 100%;
+    background-color: #6c757d; 
+    padding: 10px 20px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    border-bottom: 1px solid #ddd; 
+}
+
+.main-bar p {
+    font-weight: bold;
+    font-size: 18px; 
+    color: white; 
+    margin: 0; 
+    text-align: left; 
+    padding: 0; 
+}

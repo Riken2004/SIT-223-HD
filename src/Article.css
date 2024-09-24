@@ -1,0 +1,45 @@
+.article-container {
+    width: 1700px;
+    margin-top: 20px;
+    padding: 20px;
+    text-align: left;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.article-container p {
+    text-align: left;
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.article-container .select-text {
+    display: inline-block;
+    margin: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.article-container input[type="radio"] {
+    margin-right: 5px;
+}
+
+.article-container label {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.article-container label:hover {
+    color: #007bff;
+}
+
+.article-container .select-text input[type="radio"]:checked + span {
+    font-weight: bold;
+    color: #007bff;
+}
