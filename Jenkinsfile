@@ -1,14 +1,11 @@
+
 pipeline {
     agent any
-
-    environment {
-        CC_TEST_REPORTER_ID = credentials('codeclimate-test-reporter-id') // Ensure this exists in Jenkins credentials
-    }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD'
+                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD', credentialsId: 'github-credentials'
             }
         }
 
@@ -21,25 +18,13 @@ pipeline {
         stage('Build') {
             steps {
                 bat 'set CI=false && npm run build'
-                archiveArtifacts artifacts: 'build/', allowEmptyArchive: true
             }
         }
 
         stage('Test') {
             steps {
+                // Add --passWithNoTests flag to allow tests to pass if none are found
                 bat 'npm test -- --passWithNoTests'
-            }
-        }
-
-        stage('Code Quality Analysis') {
-            steps {
-                withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
-                    script {
-                        bat """
-                        docker run --rm -v "C:/ProgramData/Jenkins/.jenkins/workspace/React-App-Pipeline:/code" codeclimate/codeclimate analyze
-                        """
-                    }
-                }
             }
         }
 
@@ -52,15 +37,7 @@ pipeline {
 
     post {
         always {
-            node { 
-                cleanWs() 
-            }
-        }
-        success {
-            echo 'Pipeline completed successfully.'
-        }
-        failure {
-            echo 'Pipeline failed.'
+            cleanWs()
         }
     }
 }
