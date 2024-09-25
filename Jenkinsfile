@@ -14,43 +14,38 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Install project dependencies using npm
                 bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                // Build the React project with the CI environment variable set to false
                 bat 'set CI=false && npm run build'
-                // Archive the build output (optional)
                 archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
             }
         }
 
         stage('Test') {
             steps {
-                // Run tests defined in your project
-                bat 'npm test -- --passWithNoTests'  // Allows the pipeline to continue even if no tests are found
+                bat 'npm test -- --passWithNoTests'
             }
         }
 
-      stage('Code Quality Analysis') {
-    steps {
-        withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
-            script {
-                bat """
-                docker run --rm -v "C:/Jenkins/workspace/DevOps_Pipeline:/code" codeclimate/codeclimate analyze
-                """
+        stage('Code Quality Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
+                    script {
+                        // Ensure Docker is running before this stage
+                        bat '''
+                        docker run --rm -v "%cd%:/code" codeclimate/codeclimate analyze
+                        '''
+                    }
+                }
             }
         }
-    }
-}
-
 
         stage('Deploy') {
             steps {
-                // Simulate deploying the app (you can integrate Docker or AWS for actual deployment)
                 bat 'echo "Deploying to Test Environment..."'
             }
         }
@@ -58,7 +53,6 @@ pipeline {
 
     post {
         always {
-            // Clean up workspace after the build
             cleanWs()
         }
         success {
