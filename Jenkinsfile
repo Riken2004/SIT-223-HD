@@ -8,30 +8,27 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD'
+                // Use correct credentials for GitHub
+                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD', credentialsId: 'github-credentials'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Install project dependencies using npm
                 bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                // Build the React project with the CI environment variable set to false
                 bat 'set CI=false && npm run build'
-                // Archive the build output (optional)
                 archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
             }
         }
 
         stage('Test') {
             steps {
-                // Run tests defined in your project
-                bat 'npm test -- --passWithNoTests'  // Allows the pipeline to continue even if no tests are found
+                bat 'npm test -- --passWithNoTests'
             }
         }
 
@@ -49,7 +46,6 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Simulate deploying the app (you can integrate Docker or AWS for actual deployment)
                 bat 'echo "Deploying to Test Environment..."'
             }
         }
@@ -57,8 +53,7 @@ pipeline {
 
     post {
         always {
-            // Clean up workspace after the build
-            cleanWs()
+            cleanWs() // Clean workspace after the build
         }
         success {
             echo 'Pipeline completed successfully.'
