@@ -22,14 +22,32 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Add --passWithNoTests flag to allow tests to pass if none are found
                 bat 'npm test -- --passWithNoTests'
+            }
+        }
+
+        stage('Code Quality Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
+                    bat '''
+                    docker run --rm -v %cd%:/code codeclimate/codeclimate analyze
+                    '''
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                bat 'echo "Deploying to Test Environment..."'
+                bat '''
+                docker build -t my-react-app .
+                docker run -d -p 80:80 my-react-app
+                '''
+            }
+        }
+
+        stage('Monitoring and Alerting') {
+            steps {
+                bat 'echo "Monitoring with Datadog..."'
             }
         }
     }
