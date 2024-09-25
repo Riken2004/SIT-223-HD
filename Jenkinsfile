@@ -5,12 +5,12 @@ pipeline {
         CC_TEST_REPORTER_ID = credentials('codeclimate-test-reporter-id')
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD'
-            }
-        }
+  stage('Checkout') {
+    steps {
+        git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD', credentialsId: 'github-credentials'
+    }
+}
+
 
         stage('Install Dependencies') {
             steps {
