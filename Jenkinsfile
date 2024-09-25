@@ -32,16 +32,16 @@ pipeline {
         }
 
         stage('Code Quality Analysis') {
-    steps {
-        withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
-            script {
-                bat """
-                docker run --rm -v "C:/ProgramData/Jenkins/.jenkins/workspace/DevOps_Pipeline:/code" codeclimate/codeclimate analyze
-                """
+            steps {
+                withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
+                    script {
+                        bat '''
+                        docker run --rm -v "%cd%:/code" codeclimate/codeclimate analyze
+                        '''
+                    }
+                }
             }
         }
-    }
-}
 
         stage('Deploy') {
             steps {
