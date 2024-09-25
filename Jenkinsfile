@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Pull the latest code from your GitHub repository
-                git 'https://github.com/Riken2004/SIT-223-HD'
+                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD'
             }
         }
 
