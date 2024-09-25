@@ -29,9 +29,12 @@ pipeline {
         stage('Code Quality Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
-                    bat '''
-                    docker run --rm -v %cd%:/code codeclimate/codeclimate analyze
-                    '''
+                    script {
+                        def workspace = pwd().replace('\\', '/')
+                        bat """
+                        docker run --rm -v ${workspace}:/code codeclimate/codeclimate analyze
+                        """
+                    }
                 }
             }
         }
