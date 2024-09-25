@@ -35,19 +35,18 @@ pipeline {
             }
         }
 
-        stage('Code Quality Analysis') {
-            steps {
-                // Perform code quality analysis using CodeClimate
-                withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
-                    script {
-                        def workspace = pwd().replace('\\', '/').replace(' ', '\\ ')
-                        bat """
-                        docker run --rm -v "${workspace}:/code" codeclimate/codeclimate analyze
-                        """
-                    }
-                }
+      stage('Code Quality Analysis') {
+    steps {
+        withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
+            script {
+                bat """
+                docker run --rm -v "C:/Jenkins/workspace/DevOps_Pipeline:/code" codeclimate/codeclimate analyze
+                """
             }
         }
+    }
+}
+
 
         stage('Deploy') {
             steps {
