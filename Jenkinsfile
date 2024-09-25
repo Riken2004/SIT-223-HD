@@ -35,6 +35,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
                     script {
+                        // Ensure Docker is running before this stage
                         bat '''
                         docker run --rm -v "%cd%:/code" codeclimate/codeclimate analyze
                         '''
