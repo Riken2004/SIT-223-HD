@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Use correct credentials for GitHub
-                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD', credentialsId: 'github-credentials'
+                git branch: 'main', url: 'https://github.com/Riken2004/SIT-223-HD'
             }
         }
 
@@ -36,9 +35,10 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'codeclimate-test-reporter-id', variable: 'CC_TEST_REPORTER_ID')]) {
                     script {
-                        bat """
-                        docker run --rm -v "C:/ProgramData/Jenkins/.jenkins/workspace/DevOps_Pipeline:/code" codeclimate/codeclimate analyze
-                        """
+                        // Ensure Docker is running before this stage
+                        bat '''
+                        docker run --rm -v "%cd%:/code" codeclimate/codeclimate analyze
+                        '''
                     }
                 }
             }
@@ -53,7 +53,7 @@ pipeline {
 
     post {
         always {
-            cleanWs() // Clean workspace after the build
+            cleanWs()
         }
         success {
             echo 'Pipeline completed successfully.'
